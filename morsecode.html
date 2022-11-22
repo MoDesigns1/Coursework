@@ -1,0 +1,100 @@
+<html>
+<head>
+<title>Morse Code</title>
+<script>
+
+function encdec(){
+	let str_input = document.getElementById("input").value;
+	let operation = document.getElementById("operation").value;
+	
+	const mcode = {
+      'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.',
+      'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..',
+      'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.',
+      'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-',
+      'Y': '-.--', 'Z': '--..', ' ': ' ', '0': '-----',
+      '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....',
+      '6': '-....', '7': '--...', '8': '---..', '9': '----.',
+      '&': '.-...', "'": '.----.', '@': '.--.-.', ')': '-.--.-', '(': '-.--.',
+      ':': '---...', ',': '--..--', '=': '-...-', '!': '-.-.--', '.': '.-.-.-',
+      '-': '-....-', '+': '.-.-.', '"': '.-..-.', '?': '..--..', '/': '-..-.'
+    }
+
+  // initalises the answer variable to store the output.
+  let answer = "";
+  
+  // checks if operation is encode or decode
+  if (operation == "enc"){
+    let strArray = str_input.split(" ") // splits input into an array of words
+    // for loop through every word inputted
+    for (let x = 0; x < strArray.length; x++){
+      let word = strArray[x].toUpperCase(); // uppercases every word.
+      for (let y = 0; y < word.length; y++){ // for every letter in every word
+        // find the morse code and add it to answer.
+        answer += mcode[word[y]] + " ";
+      }
+    answer += " "; // adds a space between words
+    }
+  }
+  else if (operation == "dec"){
+    // Checks if there is letters in the input.
+    if (/[a-zA-Z]/.test(str_input)){
+      window.alert("Please enter morse code only.");
+      answer = ""
+    }
+    else{
+      // splits every double space into array.
+      let strArray = str_input.split("  ");
+      for (let x = 0; x < strArray.length; x++){
+        // splits every morse word into morse letters.
+        let word = strArray[x].split(" ");
+        for (let y = 0; y < word.length; y++){
+          for (let key in mcode){
+            if (mcode[key] == word[y]){
+              answer += key;
+            }
+          }
+        }
+        answer += " ";
+      }
+    }
+  }
+  // checks if there is a undefinded character.
+  if (answer.includes("undefined")){
+    // creates an alert.
+    window.alert("Invalid input");
+    answer = "";
+  }
+  // returns the encoded/decoded answer.
+  document.getElementById("output").innerHTML = answer;
+}
+
+</script>
+</head>
+<body>
+<H1>Morse code encoder/decoder</H1>
+<h3>@author: Mohab Elhasade </h3>
+<div>
+<form>
+<p> Enter a string</p>
+<p> <textarea id="input" rows='5' cols='50'></textarea> </p>
+<p>
+<div id="optionloc" style="position:absolute; top:190px; left:240px;">
+<select id="operation">
+<option value="enc">Encode</option>
+<option value="dec">Decode</option>
+</select>
+</div>
+<div id="buttonloc" style="position:absolute; top:190px; left:320px;">
+<button type="button" id="submit" onclick=encdec()>Submit</button>
+</div>
+</p>
+
+<div>
+<p>Encoded/decoded Morse code: </p>
+<textarea id="output" rows='5' cols='50' readonly></textarea>
+</div>
+</form>
+</div>
+</body>
+</html>
