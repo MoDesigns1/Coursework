@@ -17,7 +17,7 @@ class Leopard:
             testF.close()
             if len(val) == 0:
                 empty = True
-                print("File is empty.")
+                print("Empty file.")
                 self.header = None
                 self.data = None
             else:
@@ -45,9 +45,7 @@ class Leopard:
             return self.data
 
     def stats(self) -> dict:
-        if self.header is None:  # Checks if file is empty
-            return None
-        if self.data is None:  # Checks if file is empty
+        if empty:
             return None
         stats = {}  # Creates a dictionary
         j = -1
@@ -92,9 +90,7 @@ class Leopard:
         return stats
 
     def html_stats(self, stats: dict, filepath: str) -> None:
-        if self.header is None:  # Checks if file is empty
-            return None
-        if self.data is None:  # Checks if file is empty
+        if empty:
             return None
         # Initalizes the html variable that stores the code.
         html = """<html>
@@ -176,9 +172,7 @@ class Leopard:
     Returned is the count of when all criterias are True in the same row.
     If a criteria is given that doesnt exist it returns an error message.
         """
-        if self.header is None:
-            return None
-        if self.data is None:
+        if empty:
             return None
         self.header = [head.lower() for head in self.header]
         count = 0
@@ -207,9 +201,7 @@ class Leopard:
                 if self.data[i][criteriaIndex[0]] == str(c1Val):
                     if self.data[i][criteriaIndex[1]] == str(c2Val):
                         if self.data[i][criteriaIndex[2]] == str(c3Val):
-                            count += 1            
-                    
-                
+                            count += 1
         except IndexError:
             pass
         except ValueError:  # If the value is not an integer it passes
@@ -246,7 +238,7 @@ if __name__ == "__main__":
     # print()
 
     # test student.csv
-    # test3 = Leopard("student.csv")
+    # test3 = Leopard("testing.csv")
     # print(test3.get_header())
     # print(test3.get_data())
     # stats3 = test3.stats()
