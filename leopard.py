@@ -165,15 +165,15 @@ class Leopard:
                         c3Name: str = "None", c3Val: str = "None") -> int:
         """
     To count the number of instances in the data that satisfy the conditions,
-    the user must enter upto 3 critera followed by the value of the criteria.
+    the user must enter 3 critera followed by the value of the criteria.
     For example:
     objectName.count_instances("column1", "value1", "column2",
                                "value2", "column3", "value3")
     The values entered could be integers or strings.
     Integers have to be passed by as a string, for example:
     objectName.count_instances("column1", "1", "column2", "2")
-    If less than 3 criteria are submitted, the empty ones are printed as None.
-    Returned is the count of each instance that meets the criteria in the data.
+    If less than 3 criteria are submitted an error is given.
+    Returned is the count of when all criterias are True in the same row.
     If a criteria is given that doesnt exist it returns an error message.
         """
         if self.header is None:
@@ -181,16 +181,18 @@ class Leopard:
         if self.data is None:
             return None
         self.header = [head.lower() for head in self.header]
-        count = [0, 0, 0]
+        count = 0
         criteria = [c1Name, c2Name, c3Name]
         countList = []
+        criteriaIndex = []
         criteria = [crit.lower() for crit in criteria]
         if "None" in criteria:
-            criteria.remove("None")
+            countList.append("Error: 3 Criterias not passed.")
+            return countList[0]
         # Attempts to access the index of criterias
         try:
             for i in criteria:
-                self.header.index(i)
+                criteriaIndex.append(self.header.index(i))
         # If the criteria is not present it returns a error.
         except IndexError:
             countList.append("Error: One or more of criteria not found.")
@@ -202,30 +204,22 @@ class Leopard:
             for i in range(0, len(self.data)):  # Loops through the rows
                 # Checks if the value is equal to the criteria.
                 # adds to count if it matches.
-                if c1Name != "None":
-                    if self.data[i][self.header.index(criteria[0]
-                                                      )] == str(c1Val):
-                        count[0] += 1
-                if c2Name != "None":
-                    if self.data[i][self.header.index(criteria[1]
-                                                      )] == str(c2Val):
-                        count[1] += 1
-                if c3Name != "None":
-                    if self.data[i][self.header.index(criteria[2]
-                                                      )] == str(c3Val):
-                        count[2] += 1
+                if self.data[i][criteriaIndex[0]] == str(c1Val):
+                    if self.data[i][criteriaIndex[1]] == str(c2Val):
+                        if self.data[i][criteriaIndex[2]] == str(c3Val):
+                            count += 1            
+                    
+                
         except IndexError:
             pass
         except ValueError:  # If the value is not an integer it passes
             pass
         # Below adds the counts with names & values to an array to be returned.
-        countList.extend([f"the amount of instances of '{c1Name.capitalize()}"
-                          f" = {c1Val}' is {count[0]}", "the amount of"
-                          f" instances of '{c2Name.capitalize()} = {c2Val}' is"
-                          f" {count[1]}", "the amount of instances of"
-                          f" '{c3Name.capitalize()} = {c3Val}' is {count[2]}"])
+        answer = (f"The amount of instances where {c1Name.capitalize()} == ")
+        answer += (f"{c1Val} and {c2Name.capitalize()} == {c2Val} and ")
+        answer += (f"{c3Name.capitalize()} == {c3Val} is ({count})")
         # Returns as a string
-        return (f"\n{countList[0]} \n{countList[1]} \n{countList[2]}")
+        return answer
 
 
 if __name__ == "__main__":
